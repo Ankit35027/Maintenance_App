@@ -51,4 +51,5 @@ if submit:
     if prob >= 0.5:
         st.error(f"🚨 **MAINTENANCE REQUIRED** (Risk Factor: {prob*100:.1f}%)")
     else:
-        st.success(f"✅ **VEHICLE SAFE** (Risk Factor: {prob*100:.1f}%)")̀̀
+        st.success(f"✅ **VEHICLE SAFE** (Risk Factor: {prob*100:.1f}%)")
+        
