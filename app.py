@@ -10,39 +10,45 @@ def load_tools():
 
 tools = load_tools()
 
-st.set_page_config(page_title="Fleet Maintenance System", page_icon="⚙️", layout="centered")
-st.title("⚙️ Enterprise Fleet Maintenance Predictor")
-st.markdown("### Predict the maintenance risk of your fleet vehicles with advanced analytics.")
+# Set up the page
+st.set_page_config(page_title="Fleet Maintenance System", page_icon="⚙️", layout="wide")
+st.title("⚙️ Fleet Maintenance Predictor")
+st.markdown("#### Use this tool to predict the maintenance risk of your fleet vehicles with advanced analytics.")
 
 st.divider()
 
-# Form for user input
-with st.form("prediction_form"):
-    st.subheader("🚗 Vehicle Information")
-    with st.expander("Enter Vehicle Details"):
-        col1, col2 = st.columns(2)
-        with col1:
-            v_type = st.selectbox("Vehicle Type", ["Car", "Truck", "Bus"])
-            usage = st.number_input("Usage Hours (Mileage)", min_value=0, value=5000)
-            cost = st.number_input("Last Maintenance Cost ($)", min_value=0.0, value=150.0)
-        with col2:
-            brake = st.selectbox("Brake Condition", ["Good", "Fair", "Poor"])
-            anomalies = st.selectbox("Anomalies Detected?", ["No", "Yes"])
-            failure = st.selectbox("Past Failure History?", ["No", "Yes"])
+# Tabs for better organization
+tab1, tab2 = st.tabs(["🚗 Vehicle Information", "📊 Sensor Data"])
 
-    st.subheader("📊 Sensor Readings")
-    with st.expander("Enter Sensor Data"):
-        col3, col4 = st.columns(2)
-        with col3:
-            temp = st.number_input("Engine Temperature (°C)", min_value=85.0, value=90.0)
-            tire = st.number_input("Tire Pressure (PSI)", value=35.0)
-            vibration = st.slider("Vibration Level (mm/s)", 0.0, 10.0, 1.5)
-        with col4:
-            oil = st.slider("Oil Quality Score (0-100)", 0.0, 100.0, 85.0)
-            battery = st.slider("Battery Voltage (V)", 10.0, 16.0, 13.5, step=0.1)
+# Vehicle Information Tab
+with tab1:
+    st.subheader("Enter Vehicle Details")
+    col1, col2 = st.columns(2)
+    with col1:
+        v_type = st.selectbox("Vehicle Type", ["Car", "Truck", "Bus"], help="Select the type of vehicle.")
+        usage = st.number_input("Usage Hours (Mileage)", min_value=0, value=5000, help="Enter the total usage hours.")
+        cost = st.number_input("Last Maintenance Cost ($)", min_value=0.0, value=150.0, help="Enter the cost of the last maintenance.")
+    with col2:
+        brake = st.selectbox("Brake Condition", ["Good", "Fair", "Poor"], help="Select the current brake condition.")
+        anomalies = st.selectbox("Anomalies Detected?", ["No", "Yes"], help="Indicate if any anomalies were detected.")
+        failure = st.selectbox("Past Failure History?", ["No", "Yes"], help="Indicate if there is a history of failures.")
 
-    st.divider()
-    submit = st.form_submit_button("🔍 Predict Maintenance Risk")
+# Sensor Data Tab
+with tab2:
+    st.subheader("Enter Sensor Readings")
+    col3, col4 = st.columns(2)
+    with col3:
+        temp = st.number_input("Engine Temperature (°C)", min_value=85.0, value=90.0, help="Enter the engine temperature.")
+        tire = st.number_input("Tire Pressure (PSI)", value=35.0, help="Enter the tire pressure.")
+        vibration = st.slider("Vibration Level (mm/s)", 0.0, 10.0, 1.5, help="Set the vibration level.")
+    with col4:
+        oil = st.slider("Oil Quality Score (0-100)", 0.0, 100.0, 85.0, help="Set the oil quality score.")
+        battery = st.slider("Battery Voltage (V)", 10.0, 16.0, 13.5, step=0.1, help="Set the battery voltage.")
+
+st.divider()
+
+# Submit Button
+submit = st.button("🔍 Predict Maintenance Risk")
 
 # Prediction logic
 if submit:
