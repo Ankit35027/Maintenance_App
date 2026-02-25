@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-# 1. Load the "backpack" of tools
+
 @st.cache_resource
 def load_tools():
     return joblib.load('simple_fleet_model.pkl')
@@ -13,7 +13,7 @@ tools = load_tools()
 st.set_page_config(page_title="Fleet Maintenance System", page_icon="⚙️", layout="centered")
 st.title("⚙️ Enterprise Fleet Maintenance Predictor")
 
-# UI Form
+
 with st.form("prediction_form"):
     st.subheader("Vehicle Data")
     col1, col2 = st.columns(2)
@@ -29,7 +29,7 @@ with st.form("prediction_form"):
     st.subheader("Sensor Readings")
     col3, col4 = st.columns(2)
     with col3:
-        temp = st.number_input("Engine Temperature (°C)", value=90.0)
+        temp = st.number_input("Engine Temperature (°C)",min_value=85.0, value=90.0)
         tire = st.number_input("Tire Pressure (PSI)", value=35.0)
         vibration = st.slider("Vibration Level (mm/s)", 0.0, 10.0, 1.5)
     with col4:
@@ -38,9 +38,9 @@ with st.form("prediction_form"):
 
     submit = st.form_submit_button("Predict Maintenance Risk")
 
-# Prediction Logic
+
 if submit:
-    # 2. Gather UI Inputs
+    
     anom_val = 1 if anomalies == "Yes" else 0
     fail_val = 1 if failure == "Yes" else 0
 
@@ -51,23 +51,22 @@ if submit:
         'Vehicle_Type': [v_type], 'Brake_Condition': [brake] 
     })
 
-    # 3. Apply the tools step-by-step just like in Colab!
-    # Separate numbers and words
+    
     input_num = input_df[tools['num_cols']]
     input_cat = input_df[tools['cat_cols']]
 
-    # Impute (Fill blanks)
+    
     num_filled = tools['num_imputer'].transform(input_num)
     cat_filled = tools['cat_imputer'].transform(input_cat)
 
-    # Scale and Encode
+    
     num_scaled = tools['scaler'].transform(num_filled)
     cat_encoded = tools['encoder'].transform(cat_filled)
 
-    # Combine back together
+
     final_input = np.hstack((num_scaled, cat_encoded))
 
-    # 4. Predict
+    
     prob = tools['model'].predict_proba(final_input)[0][1]
     
     st.divider()
